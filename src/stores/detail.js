@@ -15,12 +15,7 @@ const useDetailStore = defineStore('detailStore', () => {
         // console.log(currentState)
     }
     const getCurrentState = computed(() => currentState)
-    const getIndexStateName = computed(() => {
-        return currentState
-    })
-    const setEdition = () => {
 
-    }
     //获取类型激活的下标
     const isActive = computed(() => {
         return (id, index, i) => {
@@ -32,7 +27,7 @@ const useDetailStore = defineStore('detailStore', () => {
         // index
     })
 
-    return { currentState, setCurrentState, setEdition, isActive }
+    return { currentState, setCurrentState, isActive, getCurrentState }
 })
 
 export default useDetailStore

@@ -83,16 +83,15 @@
                                     {{item.money}}
                                 </div>
                                 <div class="cart-detail-quantity">
-                                    <div>
+                                    <div class="cart-detail-minusBtn" @click="item.quantity--">
                                         <span>
                                             -
                                         </span>
                                     </div>
                                     <div>
                                         <input type="text" :value="item.quantity">
-
                                     </div>
-                                    <div>
+                                    <div class="cart-detail-addBtn" @click="item.quantity++">
                                         <span>
                                             +
                                         </span>
@@ -103,7 +102,7 @@
                                 </div>
                                 <div class="cart-item-op">
                                     <a href="#">移入收藏夹</a>
-                                    <a href="#">删除</a>
+                                    <a @click="del(item)">删除</a>
                                 </div>
 
                             </div>
@@ -122,7 +121,7 @@
 <script setup>
 
 import useShoppingCartStore from '@/stores/shoppingcart'
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import { useRouter } from 'vue-router'
 
 const store = useShoppingCartStore()
@@ -147,6 +146,26 @@ const toDetail = (id) => {
     })
 }
 
+
+
+// const isLastOne = computed(() => {
+//     return quantity.value <= 1 ? true : false
+// })
+
+// const minusBtn = () => {
+//     if (quantity.value > 1) {
+//         quantity.value--
+//     }
+// }
+
+
+const del = (item) => {
+
+    store.delItem(item.id)
+
+    // inject < any > ("reload")
+    router.go(0)
+}
 </script>
 
 <script >
@@ -438,6 +457,16 @@ a {
     position: relative;
 }
 
+.disable {
+    cursor: not-allowed;
+    color: #ccc;
+    background-color: rgba(0, 0, 0, .06);
+}
+
+.cart-detail-quantity>div {
+    height: 22px;
+}
+
 .cart-detail-quantity span {
     width: 20px;
     display: inline-block;
@@ -445,6 +474,7 @@ a {
     background-color: #f0f0f0;
     border: 1px solid #e5e5e5;
     cursor: pointer;
+    height: stretch;
 }
 
 .cart-detail-quantity input {

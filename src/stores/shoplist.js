@@ -26,8 +26,12 @@ const useShopListStore = defineStore('shopListStore', () => {
                 '颜色分类': ['白啤酒246ml*24瓶', '白啤酒330ml*18瓶']
             }
         },
-        { id: 4, name: '不好' },
-        { id: 5, name: '不好' }]
+        {
+            id: '4', big_title: '[旗舰店]Canon/佳能 EOS R7（新品） 机身/套机青春专微相机', small_title: '月销 100+', shop: '佳能官方旗舰店', money: '8999', item_src: require('@/assets/goods/images/4.jpg'), shop_src: require('@/assets/goods/images/shop_4.jpg'), editions: {
+                '颜色分类': ['黑色'], '套餐类型': ['官方标配']
+            }
+        },
+    ]
 
     const getAll = computed(() => list)
     const getItemById = computed((state) => {

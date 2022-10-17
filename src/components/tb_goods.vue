@@ -169,7 +169,7 @@
                                 <!-- 获取该版本信息的每个类别 -->
                                 <div class="goods-option-item goods-option-flex">
                                     <div v-for="(c,index) in item.editions[i]" :key="index"
-                                        :class="{current:index == detailStore.isActive(route.query.id,index,i)}"
+                                        :class="{current:index == detailStore.isActive(id,index,i)}"
                                         @click="setCurrent({[i]:c},index,$event)">{{c}}
                                     </div>
                                 </div>
@@ -181,14 +181,15 @@
                             </div>
 
                             <div class="goods-item-quantity-btn goods-option-flex">
-                                <div class="goods-item-quantity-minusBtn">
+                                <div class="goods-item-quantity-minusBtn" :class="{disable:isLastOne}"
+                                    @click="minusBtn">
 
-                                    <span class="">-</span>
+                                    <span>-</span>
                                 </div>
                                 <div class="goods-item-quantity-change">
-                                    <input type="text">
+                                    <input type="text" :value="quantity">
                                 </div>
-                                <div class="goods-item-quantity-addBtn">
+                                <div class="goods-item-quantity-addBtn" @click="quantity++">
                                     <span>+</span>
                                 </div>
                             </div>
@@ -199,7 +200,7 @@
                                     立即购买
                                 </button>
 
-                                <button class="goods-item-btn-add">
+                                <button class="goods-item-btn-add" @click="addCart">
                                     加入购物车
                                 </button>
                             </div>
@@ -287,15 +288,18 @@
 </template>
 
 <script setup>
-import { reactive, getCurrentInstance, ref } from 'vue'
+import { reactive, getCurrentInstance, ref, computed } from 'vue'
 import { useRoute } from 'vue-router';
 import useShopListStore from '@/stores/shoplist'
 import useDetailStore from '@/stores/detail'
+import useShoppingCartStore from '@/stores/shoppingcart'
 
 const route = useRoute();
 const detailStore = useDetailStore()
 const shopListStore = useShopListStore()
-const item = shopListStore.getItemById(route.query.id)
+const shoppingCartStore = useShoppingCartStore()
+const id = route.query.id
+const item = shopListStore.getItemById(id)
 
 
 
@@ -320,7 +324,7 @@ document.addEventListener('mousemove', function (e) {
 })
 const moveZoomArea = (mouse_x, mouse_y) => {
 
-    if (document.getElementsByClassName('goods-info-image') != null) {
+    if (document.getElementsByClassName('goods-info-image')[0] != null) {
         const pos = document.getElementsByClassName('goods-info-image')[0].getBoundingClientRect()
 
         // let area_x = window.event.clientX - pos.left
@@ -362,8 +366,22 @@ const setCurrent = (item) => {
 
 
 //添加购物车
-const addCart = () => {
+//数量按钮 当数量小于等于1时，减少按钮无效
+//修改数量无法修改至小于1的数
+const isLastOne = computed(() => {
+    return quantity.value <= 1 ? true : false
+})
+const quantity = ref(1)
 
+const minusBtn = () => {
+    if (quantity.value > 1) {
+        quantity.value--
+    }
+}
+
+const addCart = () => {
+    if (Object.keys(item.editions).length, Object.keys(detailStore.currentState).length)
+        shoppingCartStore.addItem(id, detailStore.getCurrentState, quantity.value)
 }
 
 
@@ -796,6 +814,12 @@ input::-webkit-input-placeholder {
     border-top-left-radius: 5.645px;
     border-bottom-left-radius: 5.645px;
 
+}
+
+.disable {
+    cursor: not-allowed;
+    color: #ccc;
+    background-color: rgba(0, 0, 0, .06);
 }
 
 .goods-item-quantity-change {

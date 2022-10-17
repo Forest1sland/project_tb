@@ -6,7 +6,15 @@
 
 <script setup>
 import Tb_head from '@/components/tb_head.vue';
-
+import { provide, ref, nextTick } from "vue";
+const isRouterAlive  = ref(true);
+    const reload = () => {
+      isRouterAlive.value = false;
+      nextTick(() => {
+        isRouterAlive.value = true
+      })
+    }
+    provide("reload", reload);
 </script>
 
 <script >
