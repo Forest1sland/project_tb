@@ -192,7 +192,7 @@ a {
     color: #6C6C6C;
     display: inline-block;
     width: 100%;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 9px 10px 9px;
     font: 12px/1.5 Tahoma, Helvetica, Arial, '宋体', sans-serif;
 }
 
@@ -241,7 +241,7 @@ a:hover {
 .title-hover {
     display: none;
     position: absolute;
-    right: 5px;
+    left: 0px;
     min-width: 80px;
     background-color: #f9f9f9;
     z-index: 100;

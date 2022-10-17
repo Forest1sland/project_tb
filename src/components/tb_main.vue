@@ -4,7 +4,6 @@
 </template>
 
 <script setup>
-
 import Tb_body from '@/components/tb_body.vue';
 
 

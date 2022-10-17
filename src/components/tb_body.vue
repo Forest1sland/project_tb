@@ -332,14 +332,10 @@ width 和 height 属性将不起作用。
             <div class="down">
                 <!-- <el-table-v2 :columns="columns" :data="data" :width="100" :height="400" fixed /> -->
                 <div class="push-item" v-for="item in store.getAll" :key="item.id" @click="toDetail(item.id)">
-
                     <div class="item-icon">
                         <img :src="item.item_src">
                     </div>
                     <p>{{item.big_title}}</p>
-
-
-
                 </div>
             </div>
 
@@ -683,6 +679,7 @@ a {
     text-decoration: none;
     display: inline-block;
     color: #6C6C6C;
+    
 }
 
 //设置搜索区域

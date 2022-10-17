@@ -151,74 +151,55 @@
                             </div>
                         </div>
                         <!-- 产品配置选择 -->
-                        <div class="goods-options">
-                            <div>
+                        <div class="goods-options" v-for="(i,index) in Object.keys(item.editions)" :key="index">
+                            <!-- <div>
                                 <div>
                                     配送：
                                 </div>
                                 <div>
 
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="goods-option goods-option-flex">
                                 <div>
-                                    机身颜色：
+                                    {{i}}
                                 </div>
                                 <div class="goods-option-item goods-option-flex">
-                                    <div v-for="(c,index) in item.editions.color" :key="index">
-                                        <div class="">
+                                    <div v-for="(c,index) in item.editions[i]" :key="index">
+                                        <div @click="setCurrent({[i]:c})">
                                             {{c}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="goods-option goods-option-flex">
-                                <div>
-                                    存储容量：
+                        </div>
+                        <div class="goods-item-quantity goods-option-flex">
+                            <div>
+                                数量：
+                            </div>
+
+                            <div class="goods-item-quantity-btn goods-option-flex">
+                                <div class="goods-item-quantity-minusBtn">
+
+                                    <span class="">-</span>
                                 </div>
-                                <div>
-                                    <div class="goods-option-item goods-option-flex">
-                                        <div v-for="(c,index) in item.editions.capacity" :key="index">
-                                            <div class="">
-                                                {{c}}
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="goods-item-quantity-change">
+                                    <input type="text">
+                                </div>
+                                <div class="goods-item-quantity-addBtn">
+                                    <span>+</span>
                                 </div>
                             </div>
-                            <div class="goods-option goods-option-flex">
-                                <div>
-                                    套餐类型：
-                                </div>
-                                <div>
+                        </div>
+                        <div class="goods-item-btn goods-option-flex">
+                            <div>
+                                <button class="goods-item-btn-buy">
+                                    立即购买
+                                </button>
 
-                                </div>
-                            </div>
-                            <div class="goods-option goods-option-flex">
-                                <div>
-                                    版本类型：
-                                </div>
-                                <div>
-
-                                </div>
-                            </div>
-                            <div class="goods-item-quantity goods-option-flex">
-                                <div>
-                                    数量：
-                                </div>
-
-                                <div class="goods-item-quantity-btn goods-option-flex">
-                                    <div class="goods-item-quantity-minusBtn">
-
-                                        <span class="">-</span>
-                                    </div>
-                                    <div class="goods-item-quantity-change">
-                                        <input type="text">
-                                    </div>
-                                    <div class="goods-item-quantity-addBtn">
-                                        <span>+</span>
-                                    </div>
-                                </div>
+                                <button class="goods-item-btn-add">
+                                    加入购物车
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -304,20 +285,22 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, getCurrentInstance, ref } from 'vue'
 import { useRoute } from 'vue-router';
 import useShopListStore from '@/stores/shoplist'
+import useDetailStore from '@/stores/detail'
 
-const store = useShopListStore()
 const route = useRoute();
-//store
-const item = store.getItemById(route.query.id)
+const detailStore = useDetailStore()
+const shopListStore = useShopListStore()
+const item = shopListStore.getItemById(route.query.id)
+
 
 
 //图片放大镜
 //1. zoom_area的显示位置
 //2. zoom_image中图片位置
-
+const currentInstance = getCurrentInstance()
 
 const zoom_area_style = reactive({ top: '', left: '' });
 const zoom_image_style = reactive({ top: '', left: '' })
@@ -329,37 +312,47 @@ document.addEventListener('mousemove', function (e) {
     let mouse_y = e.clientY;
 
     // console.log(mouse_x, mouse_y)
-
+    // console.log(currentInstance.ctx.$options.__name)
     moveZoomArea(mouse_x, mouse_y)
 
 })
 const moveZoomArea = (mouse_x, mouse_y) => {
 
-    const pos = document.getElementsByClassName('goods-info-image')[0].getBoundingClientRect()
+    if (document.getElementsByClassName('goods-info-image') != null) {
+        const pos = document.getElementsByClassName('goods-info-image')[0].getBoundingClientRect()
 
-    // let area_x = window.event.clientX - pos.left
-    // let area_y = window.event.clientY - pos.top
+        // let area_x = window.event.clientX - pos.left
+        // let area_y = window.event.clientY - pos.top
 
-    let area_x = mouse_x - pos.left - 100
-    let area_y = mouse_y - pos.top - 100
+        let area_x = mouse_x - pos.left - 100
+        let area_y = mouse_y - pos.top - 100
 
-    if (area_x > 0 && area_x < 200) {
-        zoom_area_style.left = area_x + 'px'
-        zoom_image_style.left = '-' + 2 * area_x + 'px'
+        if (area_x > 0 && area_x < 200) {
+            zoom_area_style.left = area_x + 'px'
+            zoom_image_style.left = '-' + 2 * area_x + 'px'
+        }
+
+        if (area_y > 0 && area_y < 200) {
+            zoom_area_style.top = area_y + 'px'
+            zoom_image_style.top = '-' + 2 * area_y + 'px'
+        }
     }
-
-    if (area_y > 0 && area_y < 200) {
-        zoom_area_style.top = area_y + 'px'
-        zoom_image_style.top = '-' + 2 * area_y + 'px'
-    }
-
     // console.log(pos.left, pos.top, window.event.clientX, window.event.clientY)
     // console.log(zoom_image_style.top, zoom_image_style.left)
 }
 
 
 
-//
+//设置current类型
+const isCurrent = ref(false)
+const setCurrent = (item) => {
+    const exist = detailStore.currentState[Object.keys(item)] == Object.values(item)
+    // console.log(detailStore.currentState[Object.keys(item)], exist, Object.keys(item))
+    // detailStore.currentState[Object.keys(item)] = undefined ? !exist : exist
+    // detailStore.setCurrentState(item)
+
+    isCurrent.value = !isCurrent.value
+}
 
 </script>
 
@@ -474,6 +467,7 @@ input::-webkit-input-placeholder {
     border-radius: 40px;
     padding: 10px;
     width: stretch;
+    height: stretch;
 
 }
 
@@ -734,7 +728,7 @@ input::-webkit-input-placeholder {
 }
 
 .goods-options {
-    padding: 15px 0px;
+    padding-top: 15px;
 }
 
 
@@ -760,8 +754,13 @@ input::-webkit-input-placeholder {
     background-color: #e0e0e0;
 }
 
+.goods-item-quantity {
+    padding-top: 15px;
+}
+
 .goods-item-quantity>div:first-child {
     width: 80px;
+    padding: 5px 0px;
 }
 
 
@@ -813,6 +812,36 @@ input::-webkit-input-placeholder {
 
 }
 
+.current {
+    border: 1px solid #ff5000;
+    background-color: #fff7f3;
+}
+
+.goods-item-btn {
+    margin: 25px 20px;
+}
+
+.goods-item-btn button {
+    border: 0;
+    height: 50px;
+    width: 125px;
+    color: #fff;
+    box-shadow: rgba(255, 203, 0, 0.2) 0px 9px 13px 0px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+.goods-item-btn-buy {
+    background: linear-gradient(90deg, rgb(255, 119, 0), rgb(255, 73, 0));
+    border-radius: 30px 0px 0px 30px;
+}
+
+.goods-item-btn-add {
+    background: linear-gradient(90deg, rgb(255, 203, 0), rgb(255, 148, 2));
+    border-radius: 0px 30px 30px 0px;
+}
 
 .toolkit {
     width: 70px;

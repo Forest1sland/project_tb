@@ -67,11 +67,12 @@
                                 <div>
                                     <input type="checkbox">
                                 </div>
-                                <div class="cart-item-img">
+                                <div class="cart-item-img" @click="toDetail(item.id)">
                                     <img :src="item.item_src" alt="">
                                 </div>
                                 <div class="cart-item-title">
-                                    {{item.big_title}}
+                                    <a @click="toDetail(item.id)">{{item.big_title}}</a>
+
                                 </div>
                                 <div class="cart-item-editions">
                                     <p v-for="(keys,index) in Object.keys(item.editions)" :key="index">
@@ -122,20 +123,29 @@
 
 import useShoppingCartStore from '@/stores/shoppingcart'
 import { computed } from 'vue';
+import { useRouter } from 'vue-router'
 
 const store = useShoppingCartStore()
 const items = store.getAll
 console.log(items)
 
 //选中的商品
-const checked = []
+// const checked = []
 //总价
-const totalPrice = computed(() => {
-    return checked.reduce()
-})
+// const totalPrice = computed(() => {
+//     return checked.reduce()
+// })
 
 
-
+const router = useRouter()
+const toDetail = (id) => {
+    router.push({
+        path: '/Detail',
+        query: {
+            id: id,
+        }
+    })
+}
 
 </script>
 
@@ -262,11 +272,12 @@ a {
     width: stretch;
     height: stretch;
     border-radius: 25px;
-}
-
-.cart-main {
     width: 1000px;
     margin: 0px auto;
+}
+
+.cart-main input {
+    cursor: pointer;
 }
 
 .cart-main>div {
@@ -386,18 +397,30 @@ a {
     width: 80px;
     height: 80px;
     margin: 0px 10px;
+    cursor: pointer;
 }
 
 .cart-item-img>img {
     width: stretch;
+    height: stretch;
 }
 
 .cart-item-title {
     width: 25%;
 }
 
+.cart-item-detail a {
+    cursor: pointer;
+}
+
+.cart-item-detail a:hover {
+    color: #f40;
+    text-decoration: underline;
+}
+
 .cart-item-editions {
     padding: 0px 10px;
+    width: 130px;
 }
 
 .cart-item-editions>p {
@@ -411,7 +434,7 @@ a {
 .cart-detail-quantity {
     display: flex;
     margin: 0px 20px;
-    left: 5%;
+    left: 4%;
     position: relative;
 }
 
@@ -421,6 +444,7 @@ a {
     text-align: center;
     background-color: #f0f0f0;
     border: 1px solid #e5e5e5;
+    cursor: pointer;
 }
 
 .cart-detail-quantity input {
@@ -428,7 +452,7 @@ a {
 }
 
 .cart-item-sum {
-    left: 10%;
+    left: 8%;
     position: relative;
     color: #ff5000;
     font-weight: 700;

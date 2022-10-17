@@ -4,9 +4,9 @@
 </template>
 
 <script setup>
-import Tb_head from './tb_head.vue';
+
 import Tb_goods from './tb_goods.vue';
-import { defineProps } from 'vue'
+
 
 </script>
 
