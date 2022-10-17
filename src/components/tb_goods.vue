@@ -151,6 +151,7 @@
                             </div>
                         </div>
                         <!-- 产品配置选择 -->
+                        <!-- 获取该商品的每个版本信息 -->
                         <div class="goods-options" v-for="(i,index) in Object.keys(item.editions)" :key="index">
                             <!-- <div>
                                 <div>
@@ -160,15 +161,16 @@
 
                                 </div>
                             </div> -->
+
                             <div class="goods-option goods-option-flex">
                                 <div>
                                     {{i}}
                                 </div>
+                                <!-- 获取该版本信息的每个类别 -->
                                 <div class="goods-option-item goods-option-flex">
-                                    <div v-for="(c,index) in item.editions[i]" :key="index">
-                                        <div @click="setCurrent({[i]:c})">
-                                            {{c}}
-                                        </div>
+                                    <div v-for="(c,index) in item.editions[i]" :key="index"
+                                        :class="{current:index == detailStore.isActive(route.query.id,index,i)}"
+                                        @click="setCurrent({[i]:c},index,$event)">{{c}}
                                     </div>
                                 </div>
                             </div>
@@ -344,15 +346,26 @@ const moveZoomArea = (mouse_x, mouse_y) => {
 
 
 //设置current类型
-const isCurrent = ref(false)
-const setCurrent = (item) => {
-    const exist = detailStore.currentState[Object.keys(item)] == Object.values(item)
-    // console.log(detailStore.currentState[Object.keys(item)], exist, Object.keys(item))
-    // detailStore.currentState[Object.keys(item)] = undefined ? !exist : exist
-    // detailStore.setCurrentState(item)
+// const isCurrent = ref(false)
 
-    isCurrent.value = !isCurrent.value
+const setCurrent = (item) => {
+    // const exist = detailStore.currentState[Object.keys(item)] == Object.values(item)
+    // console.log(detailStore.currentState[Object.keys(item)], Object.keys(item), index)
+
+    // detailStore.currentState[Object.keys(item)] = undefined ? !exist : exist
+    detailStore.setCurrentState(item)
+    // e.path[0].className = 'current' ?
+    // console.log(Object.keys(item), index, e)
+
+    // isCurrent.value = !isCurrent.value
 }
+
+
+//添加购物车
+const addCart = () => {
+
+}
+
 
 </script>
 

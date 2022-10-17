@@ -34,6 +34,11 @@ const useShopListStore = defineStore('shopListStore', () => {
         return (id) => list.find((item) => item.id === id)
     })
 
+    // const getIndexByNmae = computed(() => {
+    //     return(id,item,type)=>{}
+
+    // })
+
     return { list, getAll, getItemById }
 })
 
