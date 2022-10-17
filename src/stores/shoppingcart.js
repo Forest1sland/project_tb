@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 import useShopListStore from "./shoplist";
 
 const useShoppingCartStore = defineStore('shoppingCartStore', () => {
     const shopListStore = useShopListStore()
 
-    const shoppingcart = []
+    const shoppingcart = reactive([])
 
     const getAll = computed(() => shoppingcart)
     const getSum = computed(() => shoppingcart.length)

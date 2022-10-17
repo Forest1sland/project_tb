@@ -83,13 +83,14 @@
                                     {{item.money}}
                                 </div>
                                 <div class="cart-detail-quantity">
-                                    <div class="cart-detail-minusBtn" @click="item.quantity--">
+                                    <div class="cart-detail-minusBtn" :class="{disable:item.quantity<=1}"
+                                        @click="minusBtn(item)">
                                         <span>
                                             -
                                         </span>
                                     </div>
                                     <div>
-                                        <input type="text" :value="item.quantity">
+                                        <input type="text" :value="item.quantity" >
                                     </div>
                                     <div class="cart-detail-addBtn" @click="item.quantity++">
                                         <span>
@@ -121,12 +122,12 @@
 <script setup>
 
 import useShoppingCartStore from '@/stores/shoppingcart'
-import { computed, reactive } from 'vue';
+import { computed, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router'
 
 const store = useShoppingCartStore()
 const items = store.getAll
-console.log(items)
+// console.log(items)
 
 //选中的商品
 // const checked = []
@@ -152,20 +153,21 @@ const toDetail = (id) => {
 //     return quantity.value <= 1 ? true : false
 // })
 
-// const minusBtn = () => {
-//     if (quantity.value > 1) {
-//         quantity.value--
-//     }
-// }
+const minusBtn = (item) => {
+    if (item.quantity > 1) {
+        item.quantity--
+    }
+}
 
-
+const myReload = inject("reload")
 const del = (item) => {
 
     store.delItem(item.id)
 
-    // inject < any > ("reload")
-    router.go(0)
+
+    myReload
 }
+
 </script>
 
 <script >

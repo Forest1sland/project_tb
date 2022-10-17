@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 
 const useShopListStore = defineStore('shopListStore', () => {
-    const list = [
+    const list = reactive([
         {
             id: '1', big_title: '【至高24期免息】三星S22 Ultra 全新官方正品5G智能手机 Samsung Galaxy三星官方旗舰店', small_title: '月销 300+', shop: '三星官方旗舰店', money: '9699', item_src: require('@/assets/goods/images/1.jpg'), shop_src: require('@/assets/goods/images/shop_1.jpg'), editions: {
                 '机身颜色': ['绯影红',
@@ -31,7 +31,7 @@ const useShopListStore = defineStore('shopListStore', () => {
                 '颜色分类': ['黑色'], '套餐类型': ['官方标配']
             }
         },
-    ]
+    ])
 
     const getAll = computed(() => list)
     const getItemById = computed((state) => {

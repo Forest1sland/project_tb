@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 import useShopListStore from "./shoplist";
 
 const useDetailStore = defineStore('detailStore', () => {
     const shopListStore = useShopListStore()
     const item = shopListStore
 
-    const currentState = {}
+    const currentState = reactive({})
     // const currentState = { '': '', '': '' }
 
     const setCurrentState = (item) => {
